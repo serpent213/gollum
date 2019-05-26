@@ -5,11 +5,11 @@ defmodule Gollum.Mixfile do
     [
       app: :gollum,
       version: "0.2.2",
-      elixir: "~> 1.5",
-      elixirc_paths: elixirc_paths(Mix.env),
-      start_permanent: Mix.env == :prod,
+      elixir: "~> 1.7",
+      elixirc_paths: elixirc_paths(Mix.env()),
+      start_permanent: Mix.env() == :prod,
       deps: deps(),
-      package: package(),
+      package: package()
     ]
   end
 
@@ -22,12 +22,12 @@ defmodule Gollum.Mixfile do
 
   # Specifies which files to compile per environment
   defp elixirc_paths(:test), do: ["lib", "test/support"]
-  defp elixirc_paths(_),     do: ["lib"]
+  defp elixirc_paths(_), do: ["lib"]
 
   defp deps do
     [
-      {:httpoison, "~> 0.13"},
-      {:ex_doc, "~> 0.17.1", only: :dev, runtime: false},
+      {:httpoison, "~> 1.5.0"},
+      {:ex_doc, "~> 0.17.1", only: :dev, runtime: false}
     ]
   end
 
@@ -36,7 +36,7 @@ defmodule Gollum.Mixfile do
       description: "Robots.txt parser with caching. Modelled after Kryten.",
       maintainers: ["Ravern Koh"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/ravernkoh/gollum"},
+      links: %{"GitHub" => "https://github.com/ravernkoh/gollum"}
     ]
   end
 end
