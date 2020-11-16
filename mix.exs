@@ -33,6 +33,7 @@ defmodule Gollum.Mixfile do
 
   defp package do
     [
+      name: :new_gollum,
       description: "Robots.txt parser with caching. Modelled after Kryten.",
       maintainers: ["Oleg Tarasenko"],
       licenses: ["MIT"],
