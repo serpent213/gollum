@@ -4,7 +4,7 @@ defmodule Gollum.Mixfile do
   def project do
     [
       app: :gollum,
-      version: "0.2.2",
+      version: "0.4.0",
       elixir: "~> 1.7",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
@@ -34,9 +34,9 @@ defmodule Gollum.Mixfile do
   defp package do
     [
       description: "Robots.txt parser with caching. Modelled after Kryten.",
-      maintainers: ["Ravern Koh"],
+      maintainers: ["Oleg Tarasenko"],
       licenses: ["MIT"],
-      links: %{"GitHub" => "https://github.com/ravernkoh/gollum"}
+      links: %{"GitHub" => "https://github.com/oltarasenko/gollum"}
     ]
   end
 end
