@@ -22,7 +22,6 @@ defmodule Gollum.GoogleTest do
   @doc """
   Google-specific: system test.
   """
-  @tag :skip
   test "GoogleOnly_SystemTest" do
     assert :ok = Cache.fetch("GoogleOnly_SystemTest-empty", name: TestCache)
     empty = Cache.get("GoogleOnly_SystemTest-empty", name: TestCache)
@@ -52,7 +51,6 @@ defmodule Gollum.GoogleTest do
   obvious what they mean by "disallow /", so we assume the colon if it's
   missing.
   """
-  @tag :skip
   test "ID_LineSyntax_Line" do
     assert :ok = Cache.fetch("ID_LineSyntax_Line-robotstxt_correct", name: TestCache)
     robotstxt_correct = Cache.get("ID_LineSyntax_Line-robotstxt_correct", name: TestCache)
@@ -77,7 +75,6 @@ defmodule Gollum.GoogleTest do
   See REP RFC section "Protocol Definition".
   https://www.rfc-editor.org/rfc/rfc9309.html#section-2.1
   """
-  @tag :skip
   test "ID_LineSyntax_Groups" do
     assert :ok = Cache.fetch("ID_LineSyntax_Groups-robotstxt", name: TestCache)
     robotstxt = Cache.get("ID_LineSyntax_Groups-robotstxt", name: TestCache)

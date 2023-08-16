@@ -59,7 +59,21 @@ defmodule Gollum.Host do
   ```
   """
   @spec crawlable?(Gollum.Host.t, binary, binary) :: :crawlable | :uncrawlable | :undefined
+  def crawlable?(%Gollum.Host{rules: rules}, _user_agent, _path) when rules == %{} do
+    # Empty robots.txt: no rules and everything allowed.
+    :crawlable
+  end
+  def crawlable?(%Gollum.Host{}, "", _path) do
+    # Empty user-agent to be matched: everything allowed.
+    :crawlable
+  end
+  def crawlable?(%Gollum.Host{}, _user_agent, "") do
+    #  Empty url: implicitly disallowed.
+    :uncrawlable
+  end
   def crawlable?(%Gollum.Host{rules: rules}, user_agent, path) do
+    rules = sanitize_rules_map(rules)
+
     # Determine the user agent
     key =
       rules
@@ -81,6 +95,29 @@ defmodule Gollum.Host do
       # Return undefined if user-agent not found
       :undefined
     end
+  end
+
+  defp sanitize_rules_map(nil), do: %{}
+  defp sanitize_rules_map(rules) do
+    Enum.reduce(rules, %{}, fn {agent, rule_map}, acc ->
+      # We want to do case insensitive matching on the user agent
+      downcased_agent = String.downcase(agent)
+
+      merged_rule_map =
+        case acc[downcased_agent] do
+          nil ->
+            # No duplicate found, just add the rules
+            rule_map
+          existing_value ->
+            # Duplicate found, merge the rules
+            %{
+              allowed: rule_map[:allowed] ++ existing_value[:allowed] |> Enum.uniq(),
+              disallowed: rule_map[:disallowed] ++ existing_value[:disallowed] |> Enum.uniq()
+            }
+        end
+
+      Map.put(acc, downcased_agent, merged_rule_map)
+    end)
   end
 
   defp sanitize_user_agent_map(nil), do: %{allowed: [], disallowed: []}
