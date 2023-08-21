@@ -72,8 +72,16 @@ defmodule Gollum.Host do
     :uncrawlable
   end
   def crawlable?(%Gollum.Host{rules: rules}, user_agent, path) do
-    rules = sanitize_rules_map(rules)
+    case valid_user_agent?(user_agent) do
+      true ->
+        do_crawlable(merge_rules_map(rules), user_agent, path)
+      false ->
+        :uncrawlable
+    end
+  end
 
+  @spec do_crawlable(map, binary, binary) :: :crawlable | :uncrawlable | :undefined
+  defp do_crawlable(rules, user_agent, path) do
     # Determine the user agent
     key =
       rules
@@ -92,13 +100,31 @@ defmodule Gollum.Host do
         :undefined -> :undefined
       end
     else
-      # Return undefined if user-agent not found
-      :undefined
+      # Return crawlable if user-agent not found
+      :crawlable
     end
   end
 
-  defp sanitize_rules_map(nil), do: %{}
-  defp sanitize_rules_map(rules) do
+  @doc false
+  # Accept user-agent value up to the first space. Space is not
+  # allowed in user-agent values, but that doesn't stop webmasters from using
+  # them. This is more restrictive than the RFC, since in case of the bad value
+  # "Googlebot Images" we'd still obey the rules with "Googlebot".
+  # Extends REP RFC section "The user-agent line"
+  # https://www.rfc-editor.org/rfc/rfc9309.html#section-2.2.1
+  defp valid_user_agent?(user_agent) do
+    user_agent
+    |> String.downcase()
+    |> String.trim()
+    |> String.split()
+    |> case do
+      [_agent] -> true
+      _ -> false
+    end
+  end
+
+  defp merge_rules_map(nil), do: %{}
+  defp merge_rules_map(rules) do
     Enum.reduce(rules, %{}, fn {agent, rule_map}, acc ->
       # We want to do case insensitive matching on the user agent
       downcased_agent = String.downcase(agent)
@@ -133,7 +159,7 @@ defmodule Gollum.Host do
     agent = String.downcase(agent)
     agents
     |> Enum.map(&String.downcase/1)
-    |> Enum.filter(&match_agent?(agent, &1))
+    |> Enum.filter(&match_agent?(&1, agent))
     |> Enum.max_by(&String.length/1, fn -> nil end)
   end
 
@@ -141,7 +167,7 @@ defmodule Gollum.Host do
   # Returns whether the user agent string on the left matches the user agent
   # string on the right.
   def match_agent?(lhs, rhs) do
-    String.starts_with?(lhs, rhs) || rhs == "*"
+    String.starts_with?(lhs, rhs) || lhs == "*"
   end
 
   @doc false

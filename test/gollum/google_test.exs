@@ -153,7 +153,6 @@ defmodule Gollum.GoogleTest do
   not be empty. See REP RFC section "The user-agent line".
   https://www.rfc-editor.org/rfc/rfc9309.html#section-2.2.1
   """
-  @tag :skip
   test "ID_VerifyValidUserAgentsToObey" do
     # not implemented in Gollum for now
   end
@@ -163,7 +162,6 @@ defmodule Gollum.GoogleTest do
   user-agent line".
   https://www.rfc-editor.org/rfc/rfc9309.html#section-2.2.1
   """
-  @tag :skip
   test "ID_UserAgentValueCaseInsensitive" do
     assert :ok = Cache.fetch("ID_UserAgentValueCaseInsensitive-robotstxt_upper", name: TestCache)
     robotstxt_upper = Cache.get("ID_UserAgentValueCaseInsensitive-robotstxt_upper", name: TestCache)
@@ -231,7 +229,6 @@ defmodule Gollum.GoogleTest do
   Extends REP RFC section "The user-agent line"
   https://www.rfc-editor.org/rfc/rfc9309.html#section-2.2.1
   """
-  @tag :skip
   test "GoogleOnly_AcceptUserAgentUpToFirstSpace" do
     assert :ok = Cache.fetch("GoogleOnly_AcceptUserAgentUpToFirstSpace-robotstxt", name: TestCache)
     robotstxt = Cache.get("GoogleOnly_AcceptUserAgentUpToFirstSpace-robotstxt", name: TestCache)
@@ -249,7 +246,6 @@ defmodule Gollum.GoogleTest do
   See REP RFC section "The user-agent line".
   https://www.rfc-editor.org/rfc/rfc9309.html#section-2.2.1
   """
-  @tag :skip
   test "ID_GlobalGroups_Secondary" do
     assert :ok = Cache.fetch("ID_GlobalGroups_Secondary-robotstxt_empty", name: TestCache)
     robotstxt_empty = Cache.get("ID_GlobalGroups_Secondary-robotstxt_empty", name: TestCache)
